@@ -14,7 +14,7 @@ type State = {
 };
 
 const localStorageData = (): FormData[] => {
-    const formData = localStorage.getItem('formData');
+    const formData =localStorage.getItem('formdata')
     if (formData) {
         return JSON.parse(formData);
     }
@@ -41,7 +41,7 @@ class SignUp extends Component<{}, State> {
     handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const { formData, Data } = this.state;
-        const matched = Data.some(
+        const matched = Data.filter(
             (data) =>
                 data.username === formData.username &&
                 data.email === formData.email &&
@@ -51,7 +51,6 @@ class SignUp extends Component<{}, State> {
         if (matched) {
             alert('Matched');
         } 
-
         else {
         alert('Unmatched');
          }
@@ -62,18 +61,12 @@ class SignUp extends Component<{}, State> {
         });
     };
 
-    // componentDidMount() {
-    //     const data = localStorageData();
-    //     if (data) {
-    //         this.setState({ Data: data, submitted: true });
-    //     }
-    // }
-
-    // componentDidUpdate(prevState: State) {
-    //     if (prevState.Data !== this.state.Data) {
-    //         localStorage.setItem('formData', JSON.stringify(this.state.Data));
-    //     }
-    // }
+    componentDidMount() {
+        const data = localStorageData();
+        if (data) {
+            this.setState({ Data: data, submitted: false });
+        }
+    }
 
     render() {
         const { formData, Data, submitted } = this.state;
@@ -90,7 +83,7 @@ class SignUp extends Component<{}, State> {
                         margin="normal"
                         value={formData.username}
                         onChange={this.handleChange}
-                        required
+                        // required
                     />
                     <TextField
                         sx={{ width: '30%' }}
@@ -101,7 +94,7 @@ class SignUp extends Component<{}, State> {
                         margin="normal"
                         value={formData.email}
                         onChange={this.handleChange}
-                        required
+                        // required
                     />
                     <TextField
                         sx={{ width: '30%' }}
@@ -112,7 +105,7 @@ class SignUp extends Component<{}, State> {
                         margin="normal"
                         value={formData.password}
                         onChange={this.handleChange}
-                        required
+                        // required
                     />
                     <Button
                         sx={{ width: '15vw' }}
