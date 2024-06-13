@@ -41,7 +41,7 @@ class SignUp extends Component<{}, State> {
     handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const { formData, Data } = this.state;
-        const matched = Data.filter(
+        const matched = Data.some(
             (data) =>
                 data.username === formData.username &&
                 data.email === formData.email &&

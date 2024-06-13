@@ -2,14 +2,12 @@ import React, { Component } from 'react'
 import Local from './Component/Local'
 import Json from './Component/Json'
 import Stringify from './Component/Stringify'
-import Toast from './Component/Toast'
 import LoginPage from './Component/LoginPage'
 import {  Link, Route, Routes } from 'react-router-dom'
 import SignUp from './Component/SignPage'
 import ForgetPassword from './Component/ForgetPassword'
-
-
-
+import Validation from './Component/Validation'
+import ToastMessage from './Component/ToastMessage'
 
 export default class App extends Component {
   render() {
@@ -18,19 +16,23 @@ export default class App extends Component {
         {/* <Local/>
         <Json/>
         <Stringify/> */}
-        {/* <Toast/> */}
-       <ul style={{display:'flex', justifyContent:'space-evenly'}}>
+       
+
+       {/* <ul style={{display:'flex', justifyContent:'space-evenly'}}>
       <li >
         <Link to='/loginpage'>LOGINPAGE</Link></li>
         <li> <Link to='/signpage'>SIGNUP</Link></li>
-        {/* <li><Link to='/forgetpassword'>Forget password</Link></li> */}
-       
-        </ul>
+        </ul> */}
+  
         <Routes>
-          <Route path='/loginpage' element={<LoginPage/>}/>
+          {/* <Route path='/loginpage' element={<LoginPage/>}/> */}
           <Route path='/signpage' element={<SignUp/>}/>
-          {/* <Route path='/forgetpassword' element={<ForgetPassword/>}/> */}
+          
         </Routes>
+        {/* <Validation/> */}
+<ToastMessage/>
+
+
       </div>
     )
   }

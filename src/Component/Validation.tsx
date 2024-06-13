@@ -1,4 +1,5 @@
 
+
 import React, { Component } from 'react';
 
 type FormData = {
@@ -26,7 +27,7 @@ const localStorageData = (): FormData[] => {
     return [];
 };
 
-class LoginPage extends Component<{}, State> {
+class Validation extends Component<{}, State> {
     constructor(props: {}) {
         super(props);
         this.state = {
@@ -41,14 +42,16 @@ class LoginPage extends Component<{}, State> {
         const { name, value } = e.target;
         this.setState((prevState) => ({
             formData: { ...prevState.formData, [name]: value },
-            error: { ...prevState.error, [name]: '' },
+            // error: { ...prevState.error, [name]: '' },
         }));
     };
 
     handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const { formData, Data } = this.state;
+
         const errors = {
+
             username: formData.username.trim() === '',
             email: formData.email.trim() === '',
             password: formData.password.trim() === '',
@@ -63,18 +66,19 @@ class LoginPage extends Component<{}, State> {
                     password: errors.password ? 'Please fill password field' : '',
                 },
             });
+            return;
         }
 
         const Email = Data.some((data) => data.email === formData.email);
         if (Email) {
             this.setState({
                 error: {
-                    email: 'Email already present',
+                    email: 'Email already prsent',
                     password: 'Password already present',
                     username: ''
                 },
             });
-            return;
+            // return;
         }
 
         this.setState(
@@ -87,6 +91,7 @@ class LoginPage extends Component<{}, State> {
             () => localStorage.setItem('formData', JSON.stringify(this.state.Data))
         );
     };
+
     componentDidMount() {
         const data = localStorageData();
         if (data) {
@@ -94,7 +99,7 @@ class LoginPage extends Component<{}, State> {
         }
     }
 
-    componentDidUpdate(prevState: State) {
+    componentDidUpdate(prevProps: {}, prevState: State) {
         if (prevState.Data !== this.state.Data) {
             localStorage.setItem('formData', JSON.stringify(this.state.Data));
         }
@@ -103,7 +108,6 @@ class LoginPage extends Component<{}, State> {
     render() {
         const { formData, Data, submitted, error } = this.state;
         return (
-           
             <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
                 <h1>LOGIN FORM</h1>
                 <form onSubmit={this.handleSubmit}>
@@ -158,4 +162,4 @@ class LoginPage extends Component<{}, State> {
     }
 }
 
-export default LoginPage;
+export default Validation;
