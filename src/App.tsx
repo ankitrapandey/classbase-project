@@ -18,19 +18,20 @@ export default class App extends Component {
         <Stringify/> */}
        
 
-       {/* <ul style={{display:'flex', justifyContent:'space-evenly'}}>
+       <ul style={{display:'flex', justifyContent:'space-evenly'}}>
       <li >
         <Link to='/loginpage'>LOGINPAGE</Link></li>
         <li> <Link to='/signpage'>SIGNUP</Link></li>
-        </ul> */}
+        {/* <li><Link to='/forgetpassword'>ForgetPassword</Link></li> */}
+        </ul>
   
         <Routes>
-          {/* <Route path='/loginpage' element={<LoginPage/>}/> */}
+          <Route path='/loginpage' element={<LoginPage/>}/>
           <Route path='/signpage' element={<SignUp/>}/>
-          
+         <Route path='/forgetpassword' element={<ForgetPassword/>}/>
         </Routes>
         {/* <Validation/> */}
-<ToastMessage/>
+{/* <ToastMessage/> */}
 
 
       </div>

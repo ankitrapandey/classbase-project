@@ -153,6 +153,7 @@ class LoginPage extends Component<{}, State> {
                         ))}
                     </div>
                 )}
+                <div><a href="/forgetpassword"> forgetpassword</a></div>
             </div>
         );
     }

@@ -41,19 +41,19 @@ class SignUp extends Component<{}, State> {
     handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const { formData, Data } = this.state;
-        const matched = Data.some(
+        const matched = Data.filter(
             (data) =>
-                data.username === formData.username &&
-                data.email === formData.email &&
-                data.password === formData.password
+               
+                data.email === formData.email 
+                // data.password === formData.password
         );
 
         if (matched) {
             alert('Matched');
         } 
-        else {
-        alert('Unmatched');
-         }
+        // else {
+        // alert('Unmatched');
+        //  }
 
         this.setState({
             formData: { username: '', email: '', password: '' },
