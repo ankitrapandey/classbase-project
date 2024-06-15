@@ -19,10 +19,9 @@ export default class App extends Component {
        
 
        <ul style={{display:'flex', justifyContent:'space-evenly'}}>
-      <li >
-        <Link to='/loginpage'>LOGINPAGE</Link></li>
+      <li > <Link to='/loginpage'>LOGINPAGE</Link></li>
         <li> <Link to='/signpage'>SIGNUP</Link></li>
-        {/* <li><Link to='/forgetpassword'>ForgetPassword</Link></li> */}
+        <li><Link to='/forgetpassword'>ForgetPassword</Link></li>
         </ul>
   
         <Routes>
