@@ -1,20 +1,20 @@
 
-
-import React, { Component } from 'react';
+import React, { Component, FormEvent, ChangeEvent } from 'react';
 import { TextField, Button, Typography } from '@mui/material';
 
 type FormData = {
   email: string;
+  OTP: string;
+  password: string;
+  confirmPassword: string;
 };
 
 type State = {
   formData: FormData;
   Data: FormData[];
-  match: boolean;
-  OTP: string;
-  password: string;
-  confirmPassword: string;
-  submitted: boolean;
+  matchOtp: boolean;
+  matchPass: boolean;
+  generatedOTP: string; // Add state to store generated OTP
 };
 
 const localStorageData = (): FormData[] => {
@@ -29,28 +29,20 @@ class ForgetPassword extends Component<{}, State> {
   constructor(props: {}) {
     super(props);
     this.state = {
-      formData: { email: '' },
+      formData: { email: '', OTP: '', password: '', confirmPassword: '' },
       Data: localStorageData(),
-      match: false,
-      OTP: '',
-      password: '',
-      confirmPassword: '',
-      submitted: false,
+      matchOtp: false,
+      matchPass: false,
+      generatedOTP: '', // Initialize generatedOTP
     };
   }
 
-  handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     this.setState((prevState) => ({
       formData: { ...prevState.formData, [name]: value },
     }));
-    if (name === 'OTP') {
-      this.setState({ OTP: value });
-    } else if (name === 'password') {
-      this.setState({ password: value });
-    } else if (name === 'confirmPassword') {
-      this.setState({ confirmPassword: value });
-    }
+   
   };
 
   generateOTP = () => {
@@ -60,52 +52,64 @@ class ForgetPassword extends Component<{}, State> {
     for (let i = 0; i < 4; i++) {
       OTP += digits[Math.floor(Math.random() * len)];
     }
-    console.log(OTP);
-   
-    this.setState({ OTP });
+    console.log(`this is otp: ${OTP}`);
+
+    this.setState({ generatedOTP: OTP }); 
+    
+    // Store generated OTP in state
   };
 
-  handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { formData, Data } = this.state;
     const matchemail = Data.some((data) => data.email === formData.email);
     if (matchemail) {
       this.setState({
-        match: true,
+        matchOtp: true,
       });
-      alert('Email matched. ');
+      alert('Email matched.');
       this.generateOTP();
     } else {
-      alert('Email not found');
+      alert('Email not found.');
     }
   };
 
-  handlePasswordSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  handleOtp = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { password, confirmPassword, OTP } = this.state;
-    
-    if (password !== confirmPassword) {
-      alert('Passwords do not match.');
-    } else if (OTP === '') {
-      alert('Please fill OTP first.');
-    } else {
-      alert('Password match!');
-      // You can add logic to update password in localStorage or backend here
+    const { OTP } = this.state.formData;
+    const { generatedOTP } = this.state;
+
+    if (OTP === generatedOTP) {
+      alert('OTP matched.');
       this.setState({
-        password: '',
-        confirmPassword: '',
-        OTP: '',
-        match: false,
+        matchPass: true,
+        matchOtp: false,
       });
+    } else {
+      alert('OTP does not match.');
+    }
+  };
+
+  handlePassword = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const { password, confirmPassword } = this.state.formData;
+
+    if (password === confirmPassword) {
+      alert('Passwords match.');
+     
+      
+    } else {
+      alert('Passwords do not match.');
+  
     }
   };
 
   render() {
-    const { formData, match, OTP, password, confirmPassword } = this.state;
+    const { formData, matchOtp, matchPass } = this.state;
     return (
       <div className='h-auto w-[40vw] bg-orange-300 mt-6'>
-        <h1>SIGNUP PAGE</h1>
-        <form onSubmit={match ? this.handlePasswordSubmit : this.handleSubmit}>
+        <h1>Forget Password</h1>
+        <form onSubmit={this.handleSubmit}>
           <TextField
             sx={{ width: '30%' }}
             label="Email"
@@ -123,82 +127,79 @@ class ForgetPassword extends Component<{}, State> {
             variant="contained"
             color="primary"
           >
-            {/* {match ? 'Submit OTP' : 'Submit' }
-             */}
-            submit
-          </Button>
-
-          {match && (
-            <div>
-              <Typography variant="h6" component="h2" gutterBottom>
-                Enter OTP
-              </Typography>
-              <TextField
-                sx={{ width: '30%' }}
-                label="OTP"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                name="OTP"
-                value={OTP}
-                onChange={this.handleChange}
-              />
-              <Button
-                variant="contained"
-                color="secondary"
-              // onClick={this.generateOTP}
-              
-              >
-                Match OTP
-              </Button>
-            </div>
-          )}
-
-          <Typography variant="h6" component="h2" gutterBottom>
-            Enter New Password
-          </Typography>
-          <TextField
-            sx={{ width: '30%' }}
-            label="Password"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            name="password"
-            type="password"
-            value={password}
-            onChange={this.handleChange}
-          />
-          <Typography variant="h6" component="h2" gutterBottom>
-            Enter Confirm Password
-          </Typography>
-          <TextField
-            sx={{ width: '30%' }}
-            label="Confirm Password"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            name="confirmPassword"
-            type="password"
-            value={confirmPassword}
-            onChange={this.handleChange}
-          />
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-          >
-            Match Password
+            Submit
           </Button>
         </form>
+
+        {matchOtp && (
+          <form onSubmit={this.handleOtp}>
+            <Typography variant="h6" component="h2" gutterBottom>
+              Enter OTP
+            </Typography>
+            <TextField
+              sx={{ width: '30%' }}
+              label="OTP"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              name="OTP"
+              value={formData.OTP}
+              onChange={this.handleChange}
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              color="secondary"
+              sx={{ marginTop: '10px' }}
+            >
+              Match OTP
+            </Button>
+          </form>
+        )}
+
+        {matchPass && (
+          <form onSubmit={this.handlePassword}>
+            <Typography variant="h6" component="h2" gutterBottom>
+              Enter New Password
+            </Typography>
+            <TextField
+              sx={{ width: '30%' }}
+              label="Password"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              name="password"
+              type="password"
+              value={formData.password}
+              onChange={this.handleChange}
+            />
+            <Typography variant="h6" component="h2" gutterBottom>
+              Enter Confirm Password
+            </Typography>
+            <TextField
+              sx={{ width: '30%' }}
+              label="Confirm Password"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              name="confirmPassword"
+              type="password"
+              value={formData.confirmPassword}
+              onChange={this.handleChange}
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              sx={{ marginTop: '10px' }}
+            >
+              Match Password
+            </Button>
+          </form>
+        )}
       </div>
     );
   }
 }
 
 export default ForgetPassword;
-
-
-
-
-
-
